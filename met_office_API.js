@@ -60,6 +60,7 @@ function generate_3_hour_weather_report_from_API_response(response){
 }
 
 async function make_API_call(longitude, latitude){
+    
     try {
         const url = `https://data.hub.api.metoffice.gov.uk/sitespecific/v0/point/hourly?latitude=${longitude}&longitude=${latitude}`;
         const response = await fetch(url, {
@@ -75,12 +76,14 @@ async function make_API_call(longitude, latitude){
     } finally {
         console.log("Request complete")
     }
+    
 }
 
-
 async function generate_3_hour_weather_report_from_longitude_latitude(longitude,latitude) {
+    
     const API_response = await make_API_call(longitude, latitude);
-    generate_3_hour_weather_report_from_API_response(API_response)
+    generate_3_hour_weather_report_from_API_response(API_response);
+
 }
 
 module.exports = { generate_3_hour_weather_report_from_longitude_latitude };
