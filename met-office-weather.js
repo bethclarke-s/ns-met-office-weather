@@ -7,16 +7,20 @@ function get_longitude_latitude_from_user() {
 
     const rl = readline.createInterface({input: process.stdin, output: process.stdout});
 
-    rl.question('Welcome to the weather app! Please enter your longitude and latitude in the form (lon,lat): ', (location) => {
+    return new Promise((resolve) => {
 
-        const [longitude, latitude] = location.replaceAll("(","").replaceAll(")","").split(',');
-        console.log(`You entered a longitude: ${longitude}, and latitude: ${latitude}`);
+        rl.question('Welcome to the weather app! Please enter your longitude and latitude in the form (lon,lat): ', (location) => {
 
-        rl.close();
+            const [longitude, latitude] = location.replaceAll("(","").replaceAll(")","").split(',');
+            console.log(`You entered a longitude: ${longitude}, and latitude: ${latitude}`);
 
-    })
+            rl.close();
 
-    return longitude, latitude
+            resolve([longitude, latitude]);
+
+        })
+
+    });
 
 }
 
@@ -51,8 +55,7 @@ function get_time_from_hourly_data(data){
 
 }
 
-
-function print_weather_report_from_API_response(response, hour) {
+function print_hourly_weather_report_from_API_response(response, hour) {
 
     const hourlyData = get_hourly_data_from_API_response(response, hour);
 
@@ -67,23 +70,19 @@ function print_weather_report_from_API_response(response, hour) {
     }
 }
 
-function find_temperature_from_API_response(response){
+function generate_3_hour_weather_report_from_API_response(response){
 
     const hoursToDisplay = 3;
 
     for (let hour = 1; hour <= hoursToDisplay; hour++) {
         
-        print_weather_report_from_API_response(response,hour);
+        print_hourly_weather_report_from_API_response(response,hour);
 
     }
 
 }
 
-
-//const [longitude, latitude] = get_longitude_latitude_from_user();
-const [longitude, latitude] = [51.5539, -0.1446];
-
-const makeAPICall = async () => {
+async function make_API_call(longitude, latitude){
     try {
         const url = `https://data.hub.api.metoffice.gov.uk/sitespecific/v0/point/hourly?latitude=${longitude}&longitude=${latitude}`;
         const response = await fetch(url, {
@@ -91,14 +90,22 @@ const makeAPICall = async () => {
             headers: {"apikey": process.env.API_KEY}
         });
         const responseJson = await response.json();
-        //console.log(responseJson)
-        find_temperature_from_API_response(responseJson)
+
+        return responseJson;
+        
     } catch (error) {
         console.error(error)
     } finally {
         console.log("Request complete")
     } 
-
 }
 
-makeAPICall()
+
+async function main() {
+    const [longitude, latitude] = await get_longitude_latitude_from_user();
+    //const [longitude, latitude] = [51.5539, -0.1446];
+    const API_response = await make_API_call(longitude, latitude);
+    generate_3_hour_weather_report_from_API_response(API_response)
+}
+
+main();
