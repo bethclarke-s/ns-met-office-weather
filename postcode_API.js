@@ -22,13 +22,5 @@ async function get_longitude_latitude_from_postcode(postcode){
     return [API_response.result.longitude,API_response.result.latitude]
 }
 
-async function main() {
-    const postcode = 'NW51TL';
-    
-    const [longitude, latitude] = await get_longitude_latitude_from_postcode(postcode);
-    console.log(longitude)
-    console.log(latitude)
-}
 
-main();
-
+module.exports = { get_longitude_latitude_from_postcode };
