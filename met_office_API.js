@@ -1,4 +1,4 @@
-const { loadEnvFile } = require('node:process');
+import { loadEnvFile } from "node:process";
 loadEnvFile('.env');
 
 function get_hourly_data_from_API_response(response, hour){
@@ -45,7 +45,7 @@ function get_weather_type_from_significant_weather_code(code){
         ["30", "Thunder"]
     ]);
 
-    weather_code = code.toString();
+    const weather_code = code.toString();
 
     return weather_types.get(weather_code)
 }
@@ -119,4 +119,4 @@ async function generate_3_hour_weather_report_from_longitude_latitude(longitude,
 
 }
 
-module.exports = { generate_3_hour_weather_report_from_longitude_latitude };
+export { generate_3_hour_weather_report_from_longitude_latitude };

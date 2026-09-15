@@ -23,4 +23,4 @@ async function get_longitude_latitude_from_postcode(postcode){
 }
 
 
-module.exports = { get_longitude_latitude_from_postcode };
+export { get_longitude_latitude_from_postcode };
