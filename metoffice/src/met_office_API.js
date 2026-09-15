@@ -1,5 +1,5 @@
-import { loadEnvFile } from "node:process";
-loadEnvFile('.env');
+// import { loadEnvFile } from "node:process";
+// loadEnvFile('.env');
 
 function get_hourly_data_from_API_response(response, hour){
 
@@ -73,32 +73,40 @@ function print_hourly_weather_report_from_API_response(response, hour) {
     const temperature = hourlyData.feelsLikeTemperature;
     const weather_type = determine_weather_type_from_hourly_data(hourlyData);
 
-    console.log(`At ${time}, the temperature will feel like ${temperature}C and the weather will be: ${weather_type}. `)
-
+    let weather_report = `At ${time}, the temperature will feel like ${temperature}C and the weather will be: ${weather_type}. `;
+    
     if (weather_type.includes('rain') ) {
-        console.log('Bring an umbrella!')
+        weather_report += 'Bring an umbrella!'
     }
+    console.log(weather_report)
+    
+    return weather_report +'\n'
 }
 
-function generate_3_hour_weather_report_from_API_response(response){
+function generate_3_hour_weather_report_from_API_response(response, saveAsString = null){
 
     const hoursToDisplay = 3;
 
-    for (let hour = 1; hour <= hoursToDisplay; hour++) {
+    let weather_report = '';
 
-        print_hourly_weather_report_from_API_response(response,hour);
+    for (let hour = 1; hour <= hoursToDisplay; hour++) {
+        
+        weather_report += print_hourly_weather_report_from_API_response(response,hour);
 
     }
 
+    return weather_report
+
 }
 
+
 async function make_API_call(longitude, latitude){
-    
+
     try {
-        const url = `https://data.hub.api.metoffice.gov.uk/sitespecific/v0/point/hourly?latitude=${longitude}&longitude=${latitude}`;
+        const url = `https://data.hub.api.metoffice.gov.uk/sitespecific/v0/point/hourly?latitude=${latitude}&longitude=${longitude}`;
         const response = await fetch(url, {
             method: "GET",
-            headers: {"apikey": process.env.API_KEY}
+            headers: {"apikey": import.meta.env.API_KEY}
         });
         const responseJson = await response.json();
 
@@ -115,7 +123,8 @@ async function make_API_call(longitude, latitude){
 async function generate_3_hour_weather_report_from_longitude_latitude(longitude,latitude) {
     
     const API_response = await make_API_call(longitude, latitude);
-    generate_3_hour_weather_report_from_API_response(API_response);
+    const weather_report = generate_3_hour_weather_report_from_API_response(API_response);
+    return weather_report.toString()
 
 }
 
