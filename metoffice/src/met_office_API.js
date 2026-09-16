@@ -65,33 +65,29 @@ function get_time_from_hourly_data(data){
 
 }
 
-function print_hourly_weather_report_from_API_response(response, hour) {
+function build_hourly_weather_summary_from_API_response(response, hour) {
 
     const hourlyData = get_hourly_data_from_API_response(response, hour);
 
     const time = get_time_from_hourly_data(hourlyData);
     const temperature = hourlyData.feelsLikeTemperature;
     const weather_type = determine_weather_type_from_hourly_data(hourlyData);
+    const is_rainy = weather_type.includes('rain');
 
-    let weather_report = `At ${time}, the temperature will feel like ${temperature}C and the weather will be: ${weather_type}. `;
-    
-    if (weather_type.includes('rain') ) {
-        weather_report += 'Bring an umbrella!'
-    }
-    console.log(weather_report)
-    
-    return weather_report +'\n'
+    console.log(`At ${time}, the temperature will feel like ${temperature}C and the weather will be: ${weather_type}.${is_rainy ? ' Bring an umbrella!' : ''}`)
+
+    return { time, temperature, weather_type, is_rainy };
 }
 
-function generate_3_hour_weather_report_from_API_response(response, saveAsString = null){
+function generate_3_hour_weather_report_from_API_response(response){
 
     const hoursToDisplay = 3;
 
-    let weather_report = '';
+    const weather_report = [];
 
     for (let hour = 1; hour <= hoursToDisplay; hour++) {
-        
-        weather_report += print_hourly_weather_report_from_API_response(response,hour);
+
+        weather_report.push(build_hourly_weather_summary_from_API_response(response, hour));
 
     }
 
@@ -121,10 +117,9 @@ async function make_API_call(longitude, latitude){
 }
 
 async function generate_3_hour_weather_report_from_longitude_latitude(longitude,latitude) {
-    
+
     const API_response = await make_API_call(longitude, latitude);
-    const weather_report = generate_3_hour_weather_report_from_API_response(API_response);
-    return weather_report.toString()
+    return generate_3_hour_weather_report_from_API_response(API_response);
 
 }
 
