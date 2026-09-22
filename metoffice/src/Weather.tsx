@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { get_region_and_weather_from_postcode } from '../backend/weather.js'
 import './index.css'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 
 function Weather() {
     interface WeatherForcast {
@@ -49,6 +51,20 @@ function Weather() {
     
   }
 
+  useEffect(() => {
+
+    if (!tableData) return; // the #map div isn't in the DOM until a forecast exists
+
+    const map = L.map('map').setView([51.505, -0.09], 13);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    return () => map.remove();
+
+  }, [tableData]);
+
   return <>
       <h1> Met Office Weather </h1>
         <form action="" onSubmit={formHandler}>
@@ -57,7 +73,7 @@ function Weather() {
             <input type="submit" value="Submit"/>
         </form>
         {region && <h2>Weather forecast for {region}</h2>}
-        {tableData && (
+        {tableData && ( <>
           <table>
             <thead>
               <tr>
@@ -76,8 +92,9 @@ function Weather() {
               ))}
             </tbody>
         </table>
-        )}
-        {tableData && <p> {tableData[0].is_rainy ? "Don't forget your umbrella ☔" : "Enjoy the sun! ☀️"}</p>}
+        <p> {tableData[0].is_rainy ? "Don't forget your umbrella ☔" : "Enjoy the sun! ☀️"}</p>
+        <div id="map"></div>
+        </>)}
   </>;
 }
 
