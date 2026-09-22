@@ -1,0 +1,214 @@
+/* ---------------------------------------------------------------
+   Home page — the "fun" zone
+   Loud on purpose. Everything here is class-scoped so it can't
+   leak into the weather page.
+   --------------------------------------------------------------- */
+
+.fun-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 0 32px;
+}
+
+/* --- the question ------------------------------------------------ */
+
+.fun-question {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-h);
+  margin: 8px 0;
+}
+
+.fun-options {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.fun-options label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  font-weight: 600;
+  color: var(--text-h);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.fun-options label:hover {
+  border-color: #ff8e53;
+  background: rgba(255, 142, 83, 0.1);
+  transform: translateY(-2px);
+}
+
+.fun-options input[type="checkbox"] {
+  accent-color: #ff6b6b;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* --- the big number ---------------------------------------------- */
+
+.fun-number {
+  font-size: 108px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -4px;
+  margin: 8px 0;
+  background: linear-gradient(
+    120deg,
+    #ff6b6b 0%,
+    #ffd93d 30%,
+    #6bcb77 60%,
+    #4d96ff 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: number-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  @media (max-width: 1024px) {
+    font-size: 72px;
+    letter-spacing: -2px;
+  }
+}
+
+@keyframes number-pop {
+  0% {
+    transform: scale(0.3) rotate(-12deg);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.12) rotate(4deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* --- buttons ------------------------------------------------------ */
+
+.fun-button {
+  font: inherit;
+  font-weight: 700;
+  padding: 14px 30px;
+  border: none;
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  /* the second shadow is the "thickness" under the button */
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    filter 0.2s ease;
+}
+
+.fun-button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+}
+
+.fun-button:active {
+  transform: translateY(4px);
+}
+
+.fun-button:focus-visible {
+  outline: 3px solid var(--accent-border);
+  outline-offset: 3px;
+}
+
+/* the big call to action, with a slowly drifting rainbow */
+.fun-button--primary {
+  font-size: 20px;
+  padding: 18px 40px;
+  background: linear-gradient(
+    120deg,
+    #ff6b6b,
+    #ff8e53,
+    #ffd93d,
+    #6bcb77,
+    #4d96ff,
+    #b56bff,
+    #ff6b6b
+  );
+  background-size: 300% 100%;
+  box-shadow:
+    0 6px 0 #c4485f,
+    0 12px 24px rgba(255, 107, 107, 0.4);
+  animation: rainbow-drift 8s linear infinite;
+}
+
+.fun-button--primary:active {
+  box-shadow:
+    0 2px 0 #c4485f,
+    0 6px 12px rgba(255, 107, 107, 0.4);
+}
+
+@keyframes rainbow-drift {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 300% 50%;
+  }
+}
+
+.fun-button--again {
+  background: linear-gradient(135deg, #6bcb77, #2fa8a0);
+  box-shadow:
+    0 5px 0 #24806f,
+    0 10px 20px rgba(107, 203, 119, 0.35);
+}
+
+.fun-button--again:active {
+  box-shadow:
+    0 1px 0 #24806f,
+    0 5px 10px rgba(107, 203, 119, 0.35);
+}
+
+.fun-button--reset {
+  font-size: 15px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #8e9bb3, #6c7a94);
+  box-shadow:
+    0 4px 0 #4d586d,
+    0 8px 14px rgba(108, 122, 148, 0.3);
+}
+
+.fun-button--reset:active {
+  box-shadow:
+    0 1px 0 #4d586d,
+    0 4px 8px rgba(108, 122, 148, 0.3);
+}
+
+.fun-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* the global reduced-motion rule in index.css kills the durations,
+   but these loops should stop entirely rather than just run fast */
+@media (prefers-reduced-motion: reduce) {
+  .fun-button--primary {
+    animation: none;
+    background-position: 0% 50%;
+  }
+
+  .fun-number {
+    animation: none;
+  }
+}

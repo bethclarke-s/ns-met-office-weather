@@ -6,8 +6,6 @@ import Weather from './Weather.js';
 
 function App(): React.ReactElement {
 
-
-
   return <>
       <BrowserRouter>
         <nav>
