@@ -80,6 +80,21 @@ body {
   border-inline: 1px solid var(--border);
 }
 
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  gap: 8px;
+  padding-top: 16px;
+}
+
+nav img {
+  display: block;
+  height: 24px;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+
 /* ---------------------------------------------------------------
    Typography
    --------------------------------------------------------------- */

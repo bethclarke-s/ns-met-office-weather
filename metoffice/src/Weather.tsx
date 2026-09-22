@@ -20,7 +20,7 @@ function Weather() {
       const [region, weather_forecast] = await get_region_and_weather_from_postcode(postcode);
       console.log(region)
       //return `Success! The weather at ${postcode} at ${weather_forecast[0].time} is ${weather_forecast[0].weather_type}`;
-      return [region, weather_forecast]
+      return [region,  weather_forecast]
   /*  }
     catch {
       return "Invalid postcode! Please enter a postcode in the form 'XXX XXX'."
@@ -31,13 +31,13 @@ function Weather() {
   async function formHandler(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     
     event.preventDefault(); // to stop the form refreshing the page when it submits
-    //const [region, weatherData] = await getForecast(postcode);
-    const weatherData = [
+    const [region, weatherData] = await getForecast(postcode);
+    /*const weatherData = [
       {time: '11:00', temperature: 19.99, weather_type: 'Sunny day', is_rainy: false},
       {time: '12:00', temperature: 21.67, weather_type: 'Sunny day', is_rainy: false},
       {time: '13:00', temperature: 22.69, weather_type: 'Partly cloudy (day)', is_rainy: false}
     ];
-    const region = "Test Region";
+    const region = "Test Region";*/
     setTableData(weatherData);
     setRegion(region);
     
