@@ -68,9 +68,8 @@ body {
 }
 
 #root {
-  width: 768px;
   max-width: 100%;
-  min-height: 100svh;
+  min-height: 100dvh;
   margin: 0 auto;
   padding: 0 24px 64px;
   box-sizing: border-box;
@@ -84,6 +83,13 @@ body {
 /* ---------------------------------------------------------------
    Typography
    --------------------------------------------------------------- */
+footer {
+  padding: 24px;
+  text-align: center;
+  font-size: 15px;
+  color: var(--text);
+  background: white;
+}
 
 h1,
 h2 {
