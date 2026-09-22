@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { get_weather_from_postcode } from './weather.js'
+import { get_region_and_weather_from_postcode } from './weather.js'
 import './index.css'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
@@ -17,14 +17,15 @@ function Weather() {
 
   const [postcode, setPostcode] = useState<string>("");
   const [tableData, setTableData] = useState<WeatherForcast[]>();
-  
+  const [region, setRegion] = useState<string>()
+
   async function getForecast(postcode: string): Promise<string> {
   
 //    try {
-      const weather_forecast = await get_weather_from_postcode(postcode);
-      console.log(weather_forecast)
+      const [region, weather_forecast] = await get_region_and_weather_from_postcode(postcode);
+      console.log(region)
       //return `Success! The weather at ${postcode} at ${weather_forecast[0].time} is ${weather_forecast[0].weather_type}`;
-      return weather_forecast
+      return [region, weather_forecast]
   /*  }
     catch {
       return "Invalid postcode! Please enter a postcode in the form 'XXX XXX'."
@@ -35,13 +36,14 @@ function Weather() {
   async function formHandler(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     
     event.preventDefault(); // to stop the form refreshing the page when it submits
-    //const data = await getForecast(postcode);
-    const data = [
+    const [region, weatherData] = await getForecast(postcode);
+    /*const weatherData = [
       {time: '11:00', temperature: 19.99, weather_type: 'Sunny day', is_rainy: false},
       {time: '12:00', temperature: 21.67, weather_type: 'Sunny day', is_rainy: false},
       {time: '13:00', temperature: 22.69, weather_type: 'Partly cloudy (day)', is_rainy: false}
-    ];
-    setTableData(data);
+    ];*/
+    setTableData(weatherData);
+    setRegion(region);
     
   }
   
@@ -58,6 +60,7 @@ function Weather() {
             <input type="text" id="postcodeInput" onChange={updatePostcode}/>
             <input type="submit" value="Submit"/>
         </form>
+        {region && <h2>Weather forecast for {region}</h2>}
         {tableData && (
           <table>
             <thead>
