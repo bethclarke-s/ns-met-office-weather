@@ -1,10 +1,14 @@
 import React, {useState} from 'react';
 import { get_weather_from_postcode } from './weather.js'
 import './index.css'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
-function App(): React.ReactElement {
+function Home() {
+  return <h1>Home Page</h1>;
+}
 
-  interface WeatherForcast {
+function Weather() {
+    interface WeatherForcast {
     time: string;
     temperature: number;
     weather_type: string;
@@ -48,7 +52,7 @@ function App(): React.ReactElement {
   }
 
   return <>
-        <h1> Met Office Weather </h1>
+      <h1> Met Office Weather </h1>
         <form action="" onSubmit={formHandler}>
             <label htmlFor="postcodeInput"> Postcode: </label>
             <input type="text" id="postcodeInput" onChange={updatePostcode}/>
@@ -74,6 +78,25 @@ function App(): React.ReactElement {
             </tbody>
         </table>
         )}
+  </>;
+}
+
+function App(): React.ReactElement {
+
+
+
+  return <>
+      <BrowserRouter>
+        <nav>
+          <Link to="/">Home</Link> |{" "}
+          <Link to="/weather">Weather</Link> 
+        </nav>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/weather" element={<Weather />} />
+        </Routes>
+
+      </BrowserRouter>
     </>;
 }
 
