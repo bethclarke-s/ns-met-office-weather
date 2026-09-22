@@ -1,14 +1,8 @@
-// import { loadEnvFile } from "node:process";
-// loadEnvFile('.env');
+import { loadEnvFile } from "node:process";
+loadEnvFile('.env');
 
-function get_hourly_data_from_API_response(response, hour){
-
-    return response.features[0].properties.timeSeries[hour - 1];
-
-}
-
-function get_weather_type_from_significant_weather_code(code){
-
+function get_weather_type_from_significant_weather_code(code) {
+    
     const weather_types = new Map([
         ["NA", "Not available"],
         ["-1", "Trace rain"],
@@ -44,83 +38,74 @@ function get_weather_type_from_significant_weather_code(code){
         ["29", "Thunder shower (day)"],
         ["30", "Thunder"]
     ]);
-
+    
     const weather_code = code.toString();
-
+    
     return weather_types.get(weather_code)
 }
 
-function determine_weather_type_from_hourly_data(data) {
-
-    const weather_type =  get_weather_type_from_significant_weather_code(data.significantWeatherCode);
-    return weather_type
-
-}
-
-function get_time_from_hourly_data(data){
-
+function get_time_from_hourly_data(data) {
+    
     const dateAndTime = data.time;
     const time = dateAndTime.substr(11,5);
     return time;
+    
+}
+
+function get_hourly_data_from_API_response(response, hour) {
+
+    return response.features[0].properties.timeSeries[hour - 1];
 
 }
 
 function build_hourly_weather_summary_from_API_response(response, hour) {
 
+    hour = hour + 3; // API response returns forecast from 3 hours in the past
     const hourlyData = get_hourly_data_from_API_response(response, hour);
-
     const time = get_time_from_hourly_data(hourlyData);
     const temperature = hourlyData.feelsLikeTemperature;
-    const weather_type = determine_weather_type_from_hourly_data(hourlyData);
+    const weather_type = get_weather_type_from_significant_weather_code(hourlyData.significantWeatherCode);
     const is_rainy = weather_type.includes('rain');
-
-    console.log(`At ${time}, the temperature will feel like ${temperature}C and the weather will be: ${weather_type}.${is_rainy ? ' Bring an umbrella!' : ''}`)
-
+    
     return { time, temperature, weather_type, is_rainy };
 }
 
-function generate_3_hour_weather_report_from_API_response(response){
+function get_weather_forecast_from_API_response(response) {
+    
+    const hours_to_display = 3;
+    let weather_forecast = [];
 
-    const hoursToDisplay = 3;
-
-    const weather_report = [];
-
-    for (let hour = 1; hour <= hoursToDisplay; hour++) {
-
-        weather_report.push(build_hourly_weather_summary_from_API_response(response, hour));
-
+    for (let hour = 0; hour < hours_to_display; hour++) {
+        weather_forecast.push(build_hourly_weather_summary_from_API_response(response, hour));
     }
 
-    return weather_report
-
+    return weather_forecast
 }
 
-
-async function make_API_call(longitude, latitude){
+async function make_met_office_API_call(longitude, latitude) {
 
     try {
         const url = `https://data.hub.api.metoffice.gov.uk/sitespecific/v0/point/hourly?latitude=${latitude}&longitude=${longitude}`;
         const response = await fetch(url, {
             method: "GET",
-            headers: {"apikey": import.meta.env.API_KEY}
+            headers: {"apikey": process.env.API_KEY}//import.meta.env.API_KEY}
         });
         const responseJson = await response.json();
-
-        return responseJson;
-
+        return responseJson;  
     } catch (error) {
         console.error(error)
     } finally {
         console.log("Request complete")
     }
+    
+}
+
+async function get_weather_forecast_from_longitude_latitude(longitude, latitude) {
+    
+    const API_response = await make_met_office_API_call(longitude, latitude);
+    const weather_forecast = get_weather_forecast_from_API_response(API_response);
+    return weather_forecast
 
 }
 
-async function generate_3_hour_weather_report_from_longitude_latitude(longitude,latitude) {
-
-    const API_response = await make_API_call(longitude, latitude);
-    return generate_3_hour_weather_report_from_API_response(API_response);
-
-}
-
-export { generate_3_hour_weather_report_from_longitude_latitude };
+export { get_weather_forecast_from_longitude_latitude };
