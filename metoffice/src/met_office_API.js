@@ -1,5 +1,5 @@
-import { loadEnvFile } from "node:process";
-loadEnvFile('.env');
+// import { loadEnvFile } from "node:process";
+// loadEnvFile('.env');
 
 function get_weather_type_from_significant_weather_code(code) {
     
@@ -88,7 +88,7 @@ async function make_met_office_API_call(longitude, latitude) {
         const url = `https://data.hub.api.metoffice.gov.uk/sitespecific/v0/point/hourly?latitude=${latitude}&longitude=${longitude}`;
         const response = await fetch(url, {
             method: "GET",
-            headers: {"apikey": process.env.API_KEY}//import.meta.env.API_KEY}
+            headers: {"apikey": import.meta.env.API_KEY}//process.env.API_KEY}
         });
         const responseJson = await response.json();
         return responseJson;  

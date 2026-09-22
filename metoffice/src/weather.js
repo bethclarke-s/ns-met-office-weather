@@ -9,12 +9,5 @@ async function get_weather_from_postcode(postcode) {
 
 }
 
-async function main() {
-    
-    const weather_forecast = await get_weather_from_postcode('NW5 1TL');
-    console.log(weather_forecast);
-
-}
-
-main()
+export { get_weather_from_postcode }
 
