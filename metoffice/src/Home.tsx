@@ -24,6 +24,10 @@ function Home() {
     updateRandomNumberButtonVisible();
   }
   
+  const handleReset = (): React.ReactElement => {
+    setEnjoysFun(undefined)
+  }
+
   const handleCheck = (): React.ReactElement => {
     setEnjoysFun(true)
   }
@@ -60,7 +64,7 @@ function Home() {
       <h1 className="fun-number" key={randomNumber}>{randomNumber}</h1>
       <div className="fun-buttons">
         <button className="fun-button fun-button--again" onClick = {updateRandomNumber}> Choose a new number (fun!)</button>
-        <button className="fun-button fun-button--reset" onClick = {updateRandomNumberButtonVisible}> Reset (less fun) </button>
+        <button className="fun-button fun-button--reset" onClick = {handleReset}> Reset (less fun) </button>
       </div>
     </>)}
     </>
