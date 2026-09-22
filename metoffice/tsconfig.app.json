@@ -22,5 +22,5 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src", "backend/met_office_API.js", "backend/postcode_API.js", "backend/weather.js"]
 }
