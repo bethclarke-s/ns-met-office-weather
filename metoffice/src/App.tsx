@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { get_weather_from_postcode } from './weather.js'
+import './index.css'
 
 function App(): React.ReactElement {
 

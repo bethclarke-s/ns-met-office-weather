@@ -1,25 +1,40 @@
+/* ---------------------------------------------------------------
+   Design tokens
+   Neutrals change between light and dark mode; the blue accents
+   stay fixed, so they only need defining once.
+   --------------------------------------------------------------- */
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
+  /* neutrals (light mode) */
+  --text: #5c6573;
+  --text-h: #0d1117;
+  --bg: #ffffff;
+  --bg-sunken: #f7f9fc;
+  --border: #e3e6ea;
+  --code-bg: #f3f5f8;
+
+  /* accents */
+  --accent: #87cefa;
+  --accent-hover: #5bb8f7;
+  --accent-border: #4169e1;
+  --accent-text: #0b2545;
+  --accent-soft: rgba(135, 206, 250, 0.18);
+  --ring: rgba(65, 105, 225, 0.32);
+
   --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+    rgba(13, 17, 23, 0.06) 0 8px 20px -6px, rgba(13, 17, 23, 0.04) 0 2px 6px -2px;
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
+  --radius: 10px;
+
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
   color-scheme: light dark;
   color: var(--text);
-  background: var(--bg);
+  background: var(--bg-sunken);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -32,80 +47,210 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
+    --text: #99a3b2;
+    --text-h: #f2f5f9;
+    --bg: #171b22;
+    --bg-sunken: #0f1216;
+    --border: #2b313b;
+    --code-bg: #1d2129;
+    --accent-soft: rgba(135, 206, 250, 0.12);
     --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+      rgba(0, 0, 0, 0.5) 0 8px 20px -6px, rgba(0, 0, 0, 0.3) 0 2px 6px -2px;
   }
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
+/* ---------------------------------------------------------------
+   Layout
+   --------------------------------------------------------------- */
 
 body {
   margin: 0;
 }
+
+#root {
+  width: 768px;
+  max-width: 100%;
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background: var(--bg);
+  border-inline: 1px solid var(--border);
+}
+
+/* ---------------------------------------------------------------
+   Typography
+   --------------------------------------------------------------- */
 
 h1,
 h2 {
   font-family: var(--heading);
   font-weight: 500;
   color: var(--text-h);
+  text-wrap: balance;
 }
 
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
+  font-size: 48px;
+  letter-spacing: -1.44px;
+  margin: 48px 0 48px;
+
   @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+    font-size: 34px;
+    margin: 28px 0 20px;
   }
 }
+
 h2 {
   font-size: 24px;
   line-height: 118%;
   letter-spacing: -0.24px;
   margin: 0 0 8px;
+
   @media (max-width: 1024px) {
     font-size: 20px;
   }
 }
+
 p {
   margin: 0;
 }
 
-code,
-.counter {
+code {
   font-family: var(--mono);
+  font-size: 15px;
+  line-height: 135%;
   display: inline-flex;
+  padding: 4px 8px;
   border-radius: 4px;
+  color: var(--text-h);
+  background: var(--code-bg);
+}
+
+/* ---------------------------------------------------------------
+   Form
+   --------------------------------------------------------------- */
+
+form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+form label {
   color: var(--text-h);
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* shared between the text box and the submit button */
+form input {
+  font: inherit;
+  padding: 9px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+form input:focus-visible {
+  outline: none;
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+input[type="text"] {
+  background: var(--bg);
+  color: var(--text-h);
+}
+
+input[type="text"]:hover {
+  border-color: var(--text);
+}
+
+input[type="text"]::placeholder {
+  color: var(--text);
+  opacity: 0.7;
+}
+
+input[type="submit"] {
+  font-weight: 500;
+  border-color: transparent;
+  background: var(--accent);
+  color: var(--accent-text);
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background: var(--accent-hover);
+}
+
+input[type="submit"]:active {
+  transform: translateY(1px);
+}
+
+/* ---------------------------------------------------------------
+   Forecast table
+   Selectors avoid thead/tbody so they work with the current markup.
+   --------------------------------------------------------------- */
+
+table {
+  margin: 0 auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  font-variant-numeric: tabular-nums;
+}
+
+th,
+td {
+  padding: 12px 24px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-h);
+  background: var(--accent-soft);
+  white-space: nowrap;
+}
+
+td {
+  color: var(--text-h);
+}
+
+tr:last-child th,
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background: var(--accent-soft);
+}
+
+/* ---------------------------------------------------------------
+   Accessibility
+   --------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
